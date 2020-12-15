@@ -19,12 +19,26 @@ with open('madlib_cli/madlib.txt') as ans:
 
 
 
-questions = re.findall('{([^\}]*)}', template)
-    
+questions = re.findall('{([^}]*)}', template)
+
+# print(questions)
+# print(stripped)
+
+def parse_template(string):
+    stripped_words = re.findall('{([^}]*)}', string)
+    stripped_txt = re.sub('{([^}]*)}',"{}",string)
+    return stripped_txt, tuple(stripped_words)
+
+# parse_template()
+
+def read_template(path):
+    with open(path) as message:
+        openmessage = message.readlines()[0]
+        print(openmessage)
+        return openmessage
 
 
-with open('madlib_cli/madlib.txt') as message:
-    print(message.readlines()[0])
+
 
 
 
@@ -35,15 +49,25 @@ def wordanswers():
         answers.append(user_input)
         
 
-wordanswers()
+
 
 # print(answers)
-for str in answers:
-    template1 = re.sub("{([^\}]*)}",answers, template)
+def print_answers():
+    template1 = template
+    for word in answers:
+        template1 = re.sub("{([^}]*)}",word, template1, count = 1)
+    print(template1)
+    with open('madlib_cli/madlibdone.txt', 'w') as f2:
+        f2.write(template1)
     
-    
-print(answers)
-print(template1)
+# print(answers)
+
+if __name__ == '__main__':
+    read_template('madlib_cli/madlib.txt')
+    wordanswers()
+    print_answers()
+
+
 
 
 # def madlib():
@@ -75,5 +99,3 @@ print(template1)
 
 # print(madlib)
 
-# with open('madlib_cli/madlibdone.txt', 'w') as f2:
-#     f2.write(madlib)
